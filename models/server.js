@@ -1,9 +1,12 @@
 const express = require('express');
+const cors = require('cors');
 
 class Server {
   constructor() {
     this.app = express();
     this.port = process.env.PORT;
+
+    this.usersPath = '/api/users';
 
     // Middlewares
     this.middlewares();
@@ -12,14 +15,18 @@ class Server {
   }
 
   middlewares() {
+    // Cors
+    this.app.use(cors());
+
+    // Lectura y parseo del Body
+    this.app.use(express.json());
+
     // Directorio público
     this.app.use(express.static('public'));
   }
 
   routes() {
-    this.app.get('/', (req, res) => {
-      res.send('Hola mundo');
-    });
+    this.app.use(this.usersPath, require('../routes/user.routes'));
   }
 
   listen() {
