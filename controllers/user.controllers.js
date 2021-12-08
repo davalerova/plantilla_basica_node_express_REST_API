@@ -15,11 +15,22 @@ const usersGet = (req = request, res = response) => {
   });
 };
 
-const usersPut = (req = request, res = response) => {
+const usersPut = async (req = request, res = response) => {
   const id = req.params.id;
+  const { _id, password, google, email, ...resto } = req.body;
+
+  //TODO validar contra base de datos
+
+  if (password) {
+    // Encriptar la contraseña
+    const salt = bcryptjs.genSaltSync(10);
+    resto.password = bcryptjs.hashSync(password, salt);
+  }
+
+  const user = await User.findByIdAndUpdate(id, resto);
   res.json({
     msg: 'put API - Controlador',
-    id,
+    user,
   });
 };
 
