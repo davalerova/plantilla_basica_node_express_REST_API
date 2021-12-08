@@ -4,15 +4,10 @@ const bcryptjs = require('bcryptjs');
 const User = require('../models/user');
 const { emailAlreadyExist } = require('../helpers/db-validators');
 
-const usersGet = (req = request, res = response) => {
-  const { q, nombre, page = 1, limit } = req.query;
-  res.json({
-    msg: 'get API - Controlador',
-    q,
-    nombre,
-    page,
-    limit,
-  });
+const usersGet = async (req = request, res = response) => {
+  const { limit = 5, from = 0 } = req.query;
+  const users = await User.find().skip(Number(from)).limit(Number(limit));
+  res.json({ users });
 };
 
 const usersPut = async (req = request, res = response) => {
@@ -28,10 +23,7 @@ const usersPut = async (req = request, res = response) => {
   }
 
   const user = await User.findByIdAndUpdate(id, resto);
-  res.json({
-    msg: 'put API - Controlador',
-    user,
-  });
+  res.json(user);
 };
 
 const userPost = async (req = request, res = response) => {
