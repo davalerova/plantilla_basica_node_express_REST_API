@@ -39,9 +39,7 @@ const userPost = async (req = request, res = response) => {
   user.password = bcryptjs.hashSync(password, salt);
 
   // Guardar en BD
-
   await user.save();
-  user.password = '';
 
   res.status(201).json({
     user,
