@@ -53,10 +53,16 @@ const userPost = async (req = request, res = response) => {
   });
 };
 
-const userDelete = (req = request, res = response) => {
-  res.json({
-    msg: 'delete API - Controlador',
-  });
+const userDelete = async (req = request, res = response) => {
+  const { id } = req.params;
+
+  // Borrarlo físicamente de la BD
+  // const user = await User.findByIdAndDelete(id);
+
+  // Barrodo lógico de la BD
+  const user = await User.findByIdAndUpdate(id, { state: false });
+
+  res.json(user);
 };
 
 const userPatch = (req = request, res = response) => {
